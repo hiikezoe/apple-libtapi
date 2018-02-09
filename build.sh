@@ -15,8 +15,6 @@ CMAKE_EXTRA_ARGS=""
 if [ "$TARGET" == "Darwin" ]; then
   export MACOSX_DEPLOYMENT_TARGET=10.9
   CMAKE_EXTRA_ARGS+="-DCMAKE_SYSTEM_NAME=Darwin "
-  export CC="$(xcrun -f clang) -stdlib=libc++"
-  export CXX="$(xcrun -f clang++) -stdlib=libc++"
 elif [ "$TARGET" == "iOS" ]; then
   unset MACOSX_DEPLOYMENT_TARGET
   CMAKE_EXTRA_ARGS+="-DCMAKE_SYSTEM_NAME=Darwin "
@@ -39,11 +37,6 @@ elif [ "$TARGET" == "MINGW32" ]; then
   CMAKE_EXTRA_ARGS+="-DCMAKE_SYSTEM_NAME=Windows "
   export CC=i686-w64-mingw32-gcc
   export CXX=i686-w64-mingw32-g++
-fi
-
-if [ -n "$TARGET" -a "$PLATFORM" != "$TARGET" ]; then
-  VERSION=$(cat ../VERSION.txt | grep llvm: | tr ' ' '\n' | tail -n1)
-  CMAKE_EXTRA_ARGS+="-DLLVM_TABLEGEN=/opt/compiler/apple-llvm/$VERSION/bin/llvm-tblgen"
 fi
 
 cmake ../src/apple-llvm/src \
